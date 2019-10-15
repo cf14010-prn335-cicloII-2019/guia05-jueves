@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./../css/default.css"/>
+        <h:outputStylesheet name="./../css/cssLayout.css"/> 
+        <ui:insert id="tituloCabecera" name="tituloCabecera"><title>Falta El Titulo</title></ui:insert>  
+    </h:head>
+
+    <h:body>
+        <p:panel>
+            <div id="divTop">
+                <h:form id="idioma">
+                <ui:insert name="Idioma">Falta el idioma</ui:insert>
+                </h:form>
+                <ui:insert name="nombreEntidad"><h1 align="center">Nombre de nuestra entidad</h1></ui:insert>
+            </div>
+        </p:panel>
+        <div id="divCentro">
+            <p:scrollPanel mode="native">
+                <p:panel>
+                    <h:form id="tablaPelicula">
+                        <ui:insert name="pdf">Falta el pdf</ui:insert>
+                        <ui:insert name="lazyDataModel">Falta la tabla</ui:insert>
+                    </h:form>
+                
+                
+                    <h:form id="aggPelicula">
+                    <h:panelGroup id="pnlGeneral" >
+                        
+                        <ui:insert name="Formulario">aquí va el formulario</ui:insert>
+                    </h:panelGroup>
+                    <h:panelGroup id="pnlBotones" >
+                        
+                        <ui:insert name="Botones">aquí van los botones de la tabla</ui:insert>
+                    </h:panelGroup>
+                    </h:form>
+                    
+                </p:panel>
+            </p:scrollPanel>
+        </div>     
+            <p:panel>
+                <ui:insert name="footer">
+                    
+                </ui:insert>
+                
+            </p:panel>
+    </h:body>
+
+</html>

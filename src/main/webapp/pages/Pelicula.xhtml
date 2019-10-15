@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:co="http://xmlns.jcp.org/jsf/composite/components">
+    <ui:composition template="../resources/template/Plantilla.xhtml">
+        <ui:define name="tituloCabecera"><title>#{PeliculaLN['pelicula.cabecera']}</title></ui:define>
+        <ui:define name="Idioma">
+            <p:outputLabel for="lstIdiomas" value="Idioma:"/>
+            <p:selectOneListbox id="lstIdiomas" value="#{idiomaBean.codigoIdioma}" valueChangeListener="#{idiomaBean.cambioDeIdiomaHandler}" onchange="submit()">
+                <f:selectItems value="#{idiomaBean.paises}"/>
+            </p:selectOneListbox>
+        </ui:define>
+        <ui:define name="nombreEntidad"><h1>#{PeliculaLN['pelicula.cabecera']}</h1></ui:define>
+        <ui:define name="pdf"><h4>#{Generales['export.pdf']}</h4>
+                    <h:commandLink>
+                <p:graphicImage name="images/pdf.png" width="50"/>
+                <p:dataExporter type="pdf" target="tabla" fileName="Pelicula"/>
+            </h:commandLink>
+        </ui:define>
+        <ui:define name="lazyDataModel">
+            <h:panelGrid id="panTabla" columns="2" cellpadding="3" cellspacing="2">
+                <p:dataTable id="tabla" value="#{BeanPelicula.modelo}" var="t" lazy="true" paginator="true" rows="3" selectionMode="single"
+                             selection="#{BeanPelicula.registro}" rowKey="#{t.idPelicula}" style="fixed-size" >
+
+                    <p:ajax process="#{t}" event="rowSelect" listener="#{BeanPelicula.onRowSelected}" update="aggPelicula"/>
+                    <p:ajax process="#{t}" event="rowUnselect" resetValues="true" update="aggPelicula"/>
+
+                    <p:column headerText="#{PeliculaLN['pelicula.id']}">
+                        <h:outputText value="#{t.idPelicula}" />
+                    </p:column>
+                    <p:column headerText="#{PeliculaLN['pelicula.director']}">
+                        <h:outputText value="#{t.idDirector.nombre}"></h:outputText>
+                    </p:column>
+                    <p:column headerText="#{PeliculaLN['pelicula.clasificacion']}">
+                        <h:outputText value="#{t.idClasificacion.clasificacion}"></h:outputText>
+                    </p:column>
+                    <p:column headerText="#{PeliculaLN['pelicula.titulo']}">
+                        <h:outputText value="#{t.titulo}"></h:outputText>
+                    </p:column>
+                    <p:column headerText="#{PeliculaLN['pelicula.duracion']}">
+                        <h:outputText value="#{t.duracion}"></h:outputText>
+                    </p:column>
+                    <p:column headerText="#{PeliculaLN['pelicula.fechaEstreno']}">
+                        <h:outputText value="#{t.fechaEstreno}">
+                            <f:convertDateTime pattern="dd-MM-yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="#{PeliculaLN['pelicula.sinopsis']}">
+                        <h:outputText value="#{t.sinopsis}"></h:outputText>
+                    </p:column>
+                </p:dataTable>
+
+
+
+            </h:panelGrid>
+
+        </ui:define>
+        
+        <ui:define name="Formulario">
+            <p:panel visible="#{BeanPelicula.estado=='CREAR' or BeanPelicula.estado == 'EDITAR'}">
+            <h:panelGrid id="panDatos" columns="2" cellpadding="3" cellspacing="2">
+                
+                
+                    <p:outputLabel value="#{PeliculaLN['pelicula.id']}:" for="idPelicula"/>
+                    <p:inputText id="idPelicula" value="#{BeanPelicula.registro.idPelicula}" title="Id sala" rendered="true" size="23" disabled="true"/>
+
+
+                    <p:outputLabel value="#{PeliculaLN['pelicula.clasificacion']}:" for="txtClasificacion"/>
+                    <p:selectOneMenu id="txtClasificacion" value="#{BeanPelicula.registro.idClasificacion}" converter="omnifaces.SelectItemsConverter">
+                        <f:selectItem itemLabel="#{Generales['crud.selectone']}"/>
+                        <f:selectItems value="#{BeanPelicula.listaClasificacion}" var="idClasificacion" itemValue="#{idClasificacion}" itemLabel="#{idClasificacion.descripcion}"/>                    
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="#{PeliculaLN['pelicula.director']}:" for="txtDirector"/>
+                    <p:selectOneMenu id="txtDirector" value="#{BeanPelicula.registro.idDirector}" converter="omnifaces.SelectItemsConverter">
+                        <f:selectItem itemLabel="#{Generales['crud.selectone']}"/>
+                        <f:selectItems value="#{BeanPelicula.listaDirector}" var="idDirector" itemValue="#{idDirector}" itemLabel="#{idDirector.nombre}"/>                    
+                    </p:selectOneMenu>
+                    <p:outputLabel for="txtGenero" value="#{PeliculaLN['pelicula.genero']}:" />
+                    <p:selectCheckboxMenu id="txtGenero" value="#{BeanPelicula.registro.generoList}" label="Generos" converter="omnifaces.SelectItemsConverter" filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                        <f:selectItems value="#{BeanPelicula.generoList}" var="idGenero" itemValue="#{idGenero}" itemLabel="#{idGenero.nombre}" />
+                    </p:selectCheckboxMenu>
+
+                    <p:outputLabel value="#{PeliculaLN['pelicula.titulo']}:" for="txtTitulo"/>
+                    <p:inputText id="txtTitulo" value="#{BeanPelicula.registro.titulo}"/>
+
+
+                    <p:outputLabel value="#{PeliculaLN['pelicula.duracion']}:" for="txtDuracion"/>
+                    <p:inputText id="txtDuracion" value="#{BeanPelicula.registro.duracion}"/>
+
+
+                    <p:outputLabel for="txtFecha" value="#{PeliculaLN['pelicula.fechaEstreno']}:" />
+                    <p:calendar id="txtFecha" value="#{BeanPelicula.registro.fechaEstreno}">
+                        <p:ajax event="dateSelect" listener="#{BeanPelicula.onDateSelect}" />
+                    </p:calendar>
+                    <p:outputLabel value="#{PeliculaLN['pelicula.sinopsis']}:" for="txtSinopsis"/>
+                    <p:inputText id="txtSinopsis" value="#{BeanPelicula.registro.sinopsis}"/>
+                
+            </h:panelGrid>
+                </p:panel>
+            <br/>
+
+        </ui:define>
+            
+        <ui:define name="Botones">
+            <co:Botones managedBean="#{BeanPelicula}"/>
+        </ui:define>
+
+        <ui:define name="footer">
+            #{Generales['pages.footer']}
+        </ui:define>
+
+
+    </ui:composition>
+</html>
+
+
+
